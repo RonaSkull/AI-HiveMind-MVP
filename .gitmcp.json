@@ -1,1 +1,15 @@
-
+{
+  "ai_assistant": {
+    "name": "qwen",
+    "settings": {
+      "api_key": "${{ secrets.QWEN_API_KEY }}"
+    }
+  },
+  "tasks": [
+    {
+      "name": "evolve-nft",
+      "trigger": "daily",
+      "action": "suggest-optimizations"
+    }
+  ]
+}
