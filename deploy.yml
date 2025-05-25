@@ -1,0 +1,23 @@
+name: AI NFT Deployment
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        run: |
+          curl -fsSL https://deb.nodesource.com/setup_18.x  | sudo -E bash -
+          sudo apt-get install -y nodejs
+
+      - name: Deploy NFT Engine
+        env:
+          QWEN_API_KEY: ${{ secrets.QWEN_API_KEY }}
+        run: |
+          cd backend
+          node pear-nft-swarm.js
