@@ -27,7 +27,6 @@ AI-HiveMind-MVP/
 ├── deploy.yml # GitHub Actions workflow
 └── README.md # This guide
 
-
 ---
 
 ## 🛠️ Setup Instructions  
@@ -63,6 +62,8 @@ Use the React Native app in Expo Snack to track revenue.
 🤖 Autonomous Workflow
 1. Qwen Generates Assets:
 Poems, code, or prompts via API.
+Example
+bash
 qwen generate-poem --theme "AI Ethics" --output nft_metadata.txt
 
 2. Smart Contracts Handle Transactions :
@@ -83,6 +84,7 @@ METAMASK_PRIVATE_KEY
 Your MetaMask wallet private key (for contract interaction)
 
 Use .gitignore to hide sensitive files:
+bash
 .env  
 node_modules  
 *.log
@@ -98,8 +100,39 @@ Daily Strategy Testing                  $1,000/day (aggressive)
 🧪 Run AI NFT engine in Termux.
 📱 Test React Native frontend in Expo Snack.
 
+### 🛠️ **Step 2: Deploy Smart Contract to Sepolia**  
+1. Open `smart-contracts/AINFTVault.sol` in [Remix IDE](https://remix.ethereum.org/ ).  
+2. Compile with Solidity version `0.8.0`.  
+3. Deploy to **Sepolia** using MetaMask.  
+4. Replace `0xYourWalletHere` in the contract with your wallet address.  
 
----
+### 🧪 **Step 3: Update Backend Scripts**  
+1. In `backend/mint-nft.js` and `backend/pear-nft-swarm.js`, replace `YOUR_QWEN_API_KEY` with your actual Qwen API key.  
+2. Update the contract address and ABI in `mint-nft.js`.  
+
+### 🧩 **Step 4: Add Secrets to GitHub**  
+Go to [GitHub Secrets](https://github.com/RonaSkull/AI-HiveMind-MVP/settings/secrets/actions ):  
+1. Add `QWEN_API_KEY`: Your Qwen API key.  
+2. Add `METAMASK_PRIVATE_KEY`: Your MetaMask wallet private key (for contract interaction).  
+
+### 🚀 **Step 5: Trigger GitMCP + GitHub Actions**  
+1. Push all changes:  
+   ```bash
+   git add .
+   git commit -m "Finalize repo structure"
+   git push origin main
+
+GitMCP will now use Qwen to evolve NFTs daily.
+GitHub Actions will auto-deploy new strategies.
+
+📱 Step 6: Test Frontend in Expo Snack
+Go to Expo Snack .
+Paste the React Native monitoring app code to track profits.
+
+🧠 Step 7: Monitor & Scale
+Check reports/daily_report.md for daily profit summaries.
+Qwen will evolve high-performing NFTs daily.
+Reinvest profits into new NFTs for exponential growth.
 
 ### **Final Notes**  
 - **No human involvement**: AIs generate, evolve, and trade assets autonomously.  
@@ -107,4 +140,3 @@ Daily Strategy Testing                  $1,000/day (aggressive)
 - **Hyper-Fast Scaling**: Profits fund new NFTs → exponential growth.  
 
 Let me know if you need further refinements! 🧠⚡  
-
