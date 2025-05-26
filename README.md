@@ -91,9 +91,16 @@ node_modules
 
 💰 Profit Flow
 Action                                Revenue
-Mint NFT  $10/NFT × 5/day =             $50
-AI Evolution $100/NFT × 5/day =         $500
-Daily Strategy Testing                  $1,000/day (aggressive)
+ 📊 **Profit Model: 90% Cut**
+| Strategy | Revenue Per Unit | Time to $50,000 |
+|----------|------------------|------------------|
+| **AI Code Optimization** | $270/NFT × 10/day = $2,700 | **~18 days** |
+| **AI Prompt Market** | $2,700/NFT × 5/day = $13,500 | **~3.7 days** |
+| **Daily Strategy Testing** | $27,000/NFT × 2/day = $54,000 | **~1 day** (aggressive) |
+
+With **compounding** (reinvesting 10% of profits), you can hit **$50K in under 5 days**.
+
+---
 
 🚀 Next Steps
 ✅ Deploy contract to Sepolia (via Remix IDE).
