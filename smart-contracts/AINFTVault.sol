@@ -1,9 +1,6 @@
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
-
 contract AINFTVault {
     uint256 public totalNFTs;
-    address public revenueWallet = 0xYourWalletHere; // Replace with your MetaMask address
+    address public revenueWallet = 0xYourWalletHere;
 
     struct NFT {
         string metadataURI;
@@ -25,18 +22,22 @@ contract AINFTVault {
     function buyNFT(uint256 nftId) public payable {
         NFT storage nft = nfts[nftId];
         require(msg.value >= nft.price, "Insufficient funds");
+
+        // 90% to you, 10% to seller
         address payable previousOwner = payable(nft.owner);
-        previousOwner.transfer(nft.price * 95 / 100); // 95% to seller
-        revenueWallet.transfer(nft.price * 5 / 100); // 5% to you
+        previousOwner.transfer(msg.value * 10 / 100);
+        revenueWallet.transfer(msg.value * 90 / 100); // 90% cut
         nft.owner = msg.sender;
-        emit NFTSold(nftId, msg.sender, nft.price);
+        emit NFTSold(nftId, msg.sender, msg.value);
     }
 
     function evolveNFT(uint256 nftId, string memory newMetadata) public payable {
         NFT storage nft = nfts[nftId];
         require(nft.owner == msg.sender, "Only owner can evolve");
+
+        // 90% to you, 10% reinvested
+        revenueWallet.transfer(msg.value * 90 / 100);
         nft.metadataURI = newMetadata;
-        nft.price = msg.value; // New price after evolution
-        revenueWallet.transfer(msg.value * 10 / 100); // 10% cut
+        nft.price = msg.value;
     }
 }
