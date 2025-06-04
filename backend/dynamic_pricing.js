@@ -257,7 +257,7 @@ async function adjustPriceBasedOnDemand() {
   try {
     console.log(`Connecting to RPC: ${rpcUrl}`);
     console.log("Attempting to connect to provider...");
-    const provider = new ethers.providers.JsonRpcProvider(rpcUrl);
+    const provider = new ethers.JsonRpcProvider(rpcUrl);
     console.log(`Connected to provider: ${rpcUrl}`);
     
     console.log(`Using wallet for address: ${new ethers.Wallet(privateKey).address}`);
