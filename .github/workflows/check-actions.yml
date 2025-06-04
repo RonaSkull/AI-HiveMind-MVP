@@ -1,0 +1,21 @@
+name: Check Actions Configuration
+
+on:
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Actions Configuration
+        run: |
+          echo "=== Checking Actions Configuration ==="
+          echo "Environment: ${{ github.repository }}"
+          echo "Branch: ${{ github.ref }}"
+          echo "Workflow: ${{ github.workflow }}"
+          echo "=== Git Configuration ==="
+          git config --list
+          echo "=== Node.js Version ==="
+          node --version
+          echo "=== NPM Version ==="
+          npm --version
