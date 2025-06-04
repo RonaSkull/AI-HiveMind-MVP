@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      secrets: read
+      secrets: write
 
     steps:
       - name: Checkout repository
