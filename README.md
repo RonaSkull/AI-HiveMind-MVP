@@ -45,10 +45,33 @@ Replace 0xYourWalletHere in the contract with your MetaMask wallet address .
 npm install ethers hyperswarm dotenv
 
 4. Run AI NFT Engine
-Create a `.env.development` file in the project root. Populate it with your `SEPOLIA_URL`, `PRIVATE_KEY`, `CONTRACT_ADDRESS`, and `QWEN_API_KEY`. The scripts will load configuration from this file.
-Example `.env.development` structure:
-   SEPOLIA_URL=https_your_sepolia_rpc_url
-   PRIVATE_KEY=your_wallet_private_key_without_0x_prefix
+
+### Environment Variables
+
+Create a `.env.development` file in the project root with these environment variables:
+
+#### Ethereum Network Configuration
+- `SEPOLIA_URL`: Sepolia RPC URL (e.g., https://eth-sepolia.public.blastapi.io)
+
+#### Wallet Configuration
+- `METAMASK_PRIVATE_KEY`: Private key for the revenue wallet
+- `DEPLOYER_ADDRESS`: Deployer wallet address
+
+#### Smart Contract Configuration
+- `CONTRACT_ADDRESS`: Deployed AINFTVault contract address
+
+#### AI Configuration
+- `QWEN_API_KEY`: Qwen API key for AI integration
+
+#### P2P Swarm Configuration
+- `HYPERSWARM_TOPIC`: Hyperswarm topic for P2P communication (e.g., ai-nft-market-v3)
+
+**Important**: Never commit `.env` or `.env.development` files to version control. These should be kept secure and only shared through secure channels.
+
+5. Install Dependencies
+```bash
+npm install ethers hyperswarm dotenv
+```
    CONTRACT_ADDRESS=your_ainftvault_contract_address_on_sepolia
    QWEN_API_KEY=your_qwen_openrouter_api_key
    DEPLOYER_ADDRESS=your_wallet_public_address_optional_for_reference
