@@ -8,9 +8,6 @@ on:
 jobs:
   update-price:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      secrets: write
 
     steps:
       - name: Checkout repository
