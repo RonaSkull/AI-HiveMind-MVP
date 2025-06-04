@@ -10,16 +10,6 @@ if (!privateKey || !rpcUrl || !contractAddress) {
   process.exit(1);
 }
 
-// Get environment variables directly from process.env
-const rpcUrl = process.env.SEPOLIA_URL;
-const privateKey = process.env.METAMASK_PRIVATE_KEY;
-const contractAddress = process.env.CONTRACT_ADDRESS;
-
-if (!privateKey || !rpcUrl || !contractAddress) {
-  console.error("Error: Missing required environment variables. Please set METAMASK_PRIVATE_KEY, SEPOLIA_URL, and CONTRACT_ADDRESS in GitHub Secrets.");
-  process.exit(1);
-}
-
 // PLACEHOLDER: "abi": 
 const contractABI = [ // The ENTIRE JSON ABI from AINFTVault.json starts here
     {
@@ -260,15 +250,6 @@ const contractABI = [ // The ENTIRE JSON ABI from AINFTVault.json starts here
       "type": "function"
     }
   ];
-
-const rpcUrl = process.env.SEPOLIA_URL;
-const privateKey = process.env.METAMASK_PRIVATE_KEY;
-const contractAddress = process.env.CONTRACT_ADDRESS;
-
-if (!privateKey || !rpcUrl || !contractAddress) {
-  console.error("Error: Missing required environment variables. Please set METAMASK_PRIVATE_KEY, SEPOLIA_URL, and CONTRACT_ADDRESS in GitHub Secrets.");
-  process.exit(1);
-}
 
 async function adjustPriceBasedOnDemand() {
   try {
