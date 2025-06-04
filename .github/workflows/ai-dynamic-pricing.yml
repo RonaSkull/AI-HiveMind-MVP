@@ -24,7 +24,9 @@ jobs:
       - name: Install dependencies
         run: |
           cd backend
+          echo "Installing dependencies..."
           npm ci
+          echo "Dependencies installed successfully"
 
       - name: Run pricing script
         env:
@@ -34,5 +36,12 @@ jobs:
           CONTRACT_ADDRESS: ${{ secrets.CONTRACT_ADDRESS }} # Deployed AINFTVault contract address
         run: |
           cd backend
-          echo "Running dynamic pricing script..."
+          echo "=== Starting dynamic pricing script ==="
+          echo "Environment variables:"
+          echo "- METAMASK_PRIVATE_KEY is set: ${{ !!secrets.METAMASK_PRIVATE_KEY }}"
+          echo "- SEPOLIA_URL is set: ${{ !!secrets.SEPOLIA_URL }}"
+          echo "- CONTRACT_ADDRESS is set: ${{ !!secrets.CONTRACT_ADDRESS }}"
+          echo ""
+          echo "Running script..."
           node dynamic_pricing.js
+          echo "=== Script completed ==="
