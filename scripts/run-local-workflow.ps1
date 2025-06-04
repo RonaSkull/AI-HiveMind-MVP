@@ -1,0 +1,9 @@
+# Set up environment variables
+$env:METAMASK_PRIVATE_KEY = "${env:METAMASK_PRIVATE_KEY}"
+$env:SEPOLIA_URL = "${env:SEPOLIA_URL}"
+$env:CONTRACT_ADDRESS = "${env:CONTRACT_ADDRESS}"
+$env:QWEN_API_KEY = "${env:QWEN_API_KEY}"
+$env:HYPERSWARM_TOPIC = "${env:HYPERSWARM_TOPIC}"
+
+# Run the workflow locally
+act -j dynamic-pricing -s METAMASK_PRIVATE_KEY=${env:METAMASK_PRIVATE_KEY} -s SEPOLIA_URL=${env:SEPOLIA_URL} -s CONTRACT_ADDRESS=${env:CONTRACT_ADDRESS} -s QWEN_API_KEY=${env:QWEN_API_KEY} -s HYPERSWARM_TOPIC=${env:HYPERSWARM_TOPIC}

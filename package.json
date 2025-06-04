@@ -10,11 +10,11 @@
     "price": "node backend/dynamic_pricing.js"
   },
   "dependencies": {
-    "ethers": "5.7.2",
-    "pear": "^1.0.0",
-    "hyperswarm": "^4.8.1",
     "@actions/core": "^1.10.0",
-    "@actions/github": "^5.1.1"
+    "@actions/github": "^5.1.1",
+    "ethers": "^5.8.0",
+    "hyperswarm": "^4.8.1",
+    "pear": "^1.0.0"
   },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.2.2",

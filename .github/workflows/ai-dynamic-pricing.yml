@@ -6,10 +6,18 @@ on:
     - cron: '0 0 * * *'  # Run daily at midnight
 
 jobs:
-  dynamic-pricing:
+  test-and-deploy:
+    name: Test & Deploy
     runs-on: ubuntu-latest
+    
+    # Set job outputs
+    outputs:
+      test-status: ${{ steps.test.outcome }}
+      deploy-status: ${{ steps.deploy.outcome }}
+    
     permissions:
       contents: read
+      id-token: write  # Required for OIDC token for cloud providers
 
     steps:
       - name: Checkout code
@@ -18,23 +26,40 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '16'
+          node-version: '18'  # Using LTS version for better stability
+          cache: 'npm'
 
       - name: Install dependencies
+        id: install
         run: |
           echo "=== Installing Dependencies ==="
-          npm ci
+          npm ci --no-audit --prefer-offline
           echo "=== Dependencies Installed ==="
 
-      - name: List files for debugging
+      - name: Run unit tests
+        id: test
         run: |
-          echo "=== Directory Contents ==="
-          ls -la
-          echo "=== Backend Directory ==="
-          ls -la backend
+          echo "=== Running Unit Tests ==="
+          # Add your test command here when you have tests
+          echo "No unit tests configured yet. Skipping..."
+
+      - name: Verify environment setup
+        id: verify-env
+        env:
+          SEPOLIA_URL: ${{ secrets.SEPOLIA_URL }}
+          CONTRACT_ADDRESS: ${{ secrets.CONTRACT_ADDRESS }}
+        run: |
+          echo "=== Verifying Environment ==="
+          if [ -z "$SEPOLIA_URL" ] || [ -z "$CONTRACT_ADDRESS" ]; then
+            echo "Error: Required environment variables not set"
+            exit 1
+          fi
+          echo "Environment verification passed"
 
       - name: Run dynamic pricing script
+        id: deploy
         env:
+          NODE_ENV: production
           METAMASK_PRIVATE_KEY: ${{ secrets.METAMASK_PRIVATE_KEY }}
           SEPOLIA_URL: ${{ secrets.SEPOLIA_URL }}
           CONTRACT_ADDRESS: ${{ secrets.CONTRACT_ADDRESS }}
@@ -43,23 +68,47 @@ jobs:
         run: |
           echo "=== Starting Dynamic Pricing ==="
           echo "=== Environment Variables Check ==="
-          printenv | grep -i "key"  # Only shows non-secret environment variables
+          # Only show non-sensitive environment variables
+          printenv | grep -v -i "key\|secret\|private"
+          
           echo "=== Running Script ==="
           node backend/dynamic_pricing.js
-          echo "=== Script Completed ==="
+          
+          if [ $? -ne 0 ]; then
+            echo "Error: Script execution failed"
+            exit 1
+          fi
+          
+          echo "=== Script Completed Successfully ==="
 
-      # Add deploy key setup
-      - name: Run dynamic pricing script
+      - name: Upload logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: error-logs
+          path: |
+            **/*.log
+            **/error*.txt
+          if-no-files-found: ignore
+          retention-days: 1
+
+  notify:
+    name: Notify Status
+    needs: test-and-deploy
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check workflow status
         env:
-          METAMASK_PRIVATE_KEY: ${{ secrets.METAMASK_PRIVATE_KEY }}
-          SEPOLIA_URL: ${{ secrets.SEPOLIA_URL }}
-          CONTRACT_ADDRESS: ${{ secrets.CONTRACT_ADDRESS }}
-          QWEN_API_KEY: ${{ secrets.QWEN_API_KEY }}
-          HYPERSWARM_TOPIC: ${{ secrets.HYPERSWARM_TOPIC }}
+          TEST_STATUS: ${{ needs.test-and-deploy.outputs.test-status }}
+          DEPLOY_STATUS: ${{ needs.test-and-deploy.outputs.deploy-status }}
         run: |
-          echo "=== Starting Dynamic Pricing ==="
-          echo "=== Environment Variables Check ==="
-          printenv | grep -i "key"  # Secrets won't show here (normal)
-          echo "=== Running Script ==="
-          node backend/dynamic_pricing.js
-          echo "=== Script Completed ==="
+          echo "Test Status: $TEST_STATUS"
+          echo "Deploy Status: $DEPLOY_STATUS"
+          
+          if [ "$TEST_STATUS" != "success" ] || [ "$DEPLOY_STATUS" != "success" ]; then
+            echo "Workflow failed. Check the logs for more details."
+            exit 1
+          else
+            echo "Workflow completed successfully!"
+          fi
