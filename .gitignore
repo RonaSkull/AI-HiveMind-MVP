@@ -1,16 +1,20 @@
 # Dependencies
 node_modules/
+*.lock
+*.tgz
 
 # Environment variables
 .env
-.env.local
-.env.*.local
+.env.*
+*.env
+*.env.*
 
 # Build output
 build/
 dist/
 
 # Logs
+logs/
 *.log
 npm-debug.log*
 yarn-debug.log*
@@ -21,6 +25,13 @@ yarn-error.log*
 .vscode/
 *.swp
 *.swo
+*.sln
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.sublime-workspace
+*.sublime-project
 
 # OS
 .DS_Store
@@ -28,11 +39,15 @@ Thumbs.db
 
 # Testing
 coverage/
+*.coverage
+*.cover
+*.lcov
 
 # Debug
 npm-debug.log
 yarn-debug.log
 yarn-error.log
+*.debug
 
 # Misc
 *.pem
@@ -43,15 +58,45 @@ yarn-error.log
 *.pfx
 *.jks
 *.keystore
-*.p12
-*.pfx
-*.p12
-*.pfx
-*.p12
-*.pfx
-*.p12
-*.pfx
-*.p12
-*.pfx
-*.p12
-*.pfx
+*.cer
+*.csr
+*.p7b
+*.p7c
+*.p7r
+*.p8
+
+# GitHub Actions
+.github/workflows/*.yml.backup
+.github/workflows/*.yaml.backup
+
+# NPM
+.npm
+.npmrc
+
+# Hardhat
+hardhat.config.js
+hardhat.config.ts
+hardhat.config.mjs
+
+# Cache
+.cache/
+**/cache/
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+*.tmp
+*.bak
+*.orig
+*.temp
+
+# Editor backup files
+*~
+*.swp
+*.swo
