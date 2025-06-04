@@ -296,10 +296,10 @@ async function adjustPriceBasedOnDemand() {
     const newMinimumPriceEth = basePriceEth + (Math.floor(Number(currentTotalTransactions) / 100) * 0.01);
     console.log(`Calculated new minimum price (ETH): ${newMinimumPriceEth.toFixed(5)}`); // Convert factor to number for JS multiplication
     
-    const newMinPriceWei = ethers.utils.parseEther(newMinimumPriceEth.toFixed(18)); // toFixed to handle potential floating point inaccuracies before parsing
+    const newMinPriceWei = ethers.utils.parseUnits(newMinimumPriceEth.toFixed(18), 'ether'); // toFixed to handle potential floating point inaccuracies before parsing
 
     const currentMinPriceWei = await contract.minimumPrice(); // Assuming 'minimumPrice' is the getter for your minimum price state variable
-    const currentMinimumPriceEth = ethers.utils.formatEther(currentMinPriceWei);
+    const currentMinimumPriceEth = ethers.utils.formatUnits(currentMinPriceWei, 'ether');
     console.log(`Current minimum price (ETH): ${currentMinimumPriceEth}`);
 
     if (newMinPriceWei.eq(currentMinPriceWei)) {
@@ -307,11 +307,11 @@ async function adjustPriceBasedOnDemand() {
       return;
     }
 
-    console.log(`Attempting to update minimum price to: ${ethers.utils.formatEther(newMinPriceWei)} ETH...`);
+    console.log(`Attempting to update minimum price to: ${ethers.utils.formatUnits(newMinPriceWei, 'ether')} ETH...`);
     console.log(`New price (${newMinimumPriceEth.toFixed(5)}) is different from current price (${currentMinimumPriceEth}). Attempting to update.`);
-    const tx = await contract.connect(wallet).setMinimumPrice(newMinPriceWei);
+    const tx = await contract.connect(provider).setMinimumPrice(newMinPriceWei);
     console.log(`Transaction sent: ${tx.hash}`);
-    await tx.wait();
+    await tx.then();
     console.log("Minimum price updated successfully!");
   } catch (error) {
     console.error("Error adjusting price:", error);
