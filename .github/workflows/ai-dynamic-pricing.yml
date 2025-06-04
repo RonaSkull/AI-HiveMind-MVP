@@ -33,11 +33,25 @@ jobs:
 
       - name: Run dynamic pricing script
         env:
-          METAMASK_PRIVATE_KEY: ${{ secrets.METAMASK_PRIVATE_KEY }}
-          SEPOLIA_URL: ${{ secrets.SEPOLIA_URL }}
-          CONTRACT_ADDRESS: ${{ secrets.CONTRACT_ADDRESS }}
-          QWEN_API_KEY: ${{ secrets.QWEN_API_KEY }}
-          HYPERSWARM_TOPIC: ${{ secrets.HYPERSWARM_TOPIC }}
+          METAMASK_PRIVATE_KEY: ${{ env.METAMASK_PRIVATE_KEY }}
+          SEPOLIA_URL: ${{ env.SEPOLIA_URL }}
+          CONTRACT_ADDRESS: ${{ env.CONTRACT_ADDRESS }}
+          QWEN_API_KEY: ${{ env.QWEN_API_KEY }}
+          HYPERSWARM_TOPIC: ${{ env.HYPERSWARM_TOPIC }}
+        run: |
+          echo "=== Starting Dynamic Pricing ==="
+          echo "=== Environment Variables Check ==="
+          printenv | grep -i "key"  # Only shows non-secret environment variables
+          echo "=== Running Script ==="
+          node backend/dynamic_pricing.js
+          echo "=== Script Completed ==="
+
+      # Add deploy key setup
+      - name: Setup Deploy Key
+        run: |
+          echo "=== Setting up deploy key ==="
+          echo "Key length: ${#METAMASK_PRIVATE_KEY}"
+          echo "=== Deploy key setup complete ==="
         run: |
           echo "=== Starting Dynamic Pricing ==="
           echo "=== Environment Variables Check ==="
