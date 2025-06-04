@@ -45,6 +45,7 @@ jobs:
 
       - name: Run pricing script
         env:
+          CI: true
           # QWEN_API_KEY: ${{ secrets.QWEN_API_KEY }} # Not used by current script, but good to have if Qwen integration is direct
           METAMASK_PRIVATE_KEY: ${{ secrets.METAMASK_PRIVATE_KEY }} # This will be revenueWallet's private key
           SEPOLIA_URL: ${{ secrets.SEPOLIA_URL }} # Your Sepolia RPC URL

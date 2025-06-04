@@ -1,6 +1,12 @@
 import { ethers } from "ethers";
+import dotenv from 'dotenv';
 
-// Get environment variables directly from process.env
+// Load environment variables from .env file for local development
+if (!process.env.CI) {
+  dotenv.config();
+}
+
+// Get environment variables
 const rpcUrl = process.env.SEPOLIA_URL;
 const privateKey = process.env.METAMASK_PRIVATE_KEY;
 const contractAddress = process.env.CONTRACT_ADDRESS;
