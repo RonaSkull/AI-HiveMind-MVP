@@ -33,9 +33,3 @@ jobs:
           
           echo "Running dynamic pricing script..."
           node dynamic_pricing.js
-          echo "Installing dependencies..."
-          cd backend
-          npm install
-          
-          echo "Running dynamic pricing script..."
-          node dynamic_pricing.js
