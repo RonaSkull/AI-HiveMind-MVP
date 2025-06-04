@@ -10,7 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      secrets: read
 
     steps:
       - name: Checkout code
@@ -50,15 +49,17 @@ jobs:
           echo "=== Script Completed ==="
 
       # Add deploy key setup
-      - name: Setup Deploy Key
-        run: |
-          echo "=== Setting up deploy key ==="
-          echo "Key length: ${#METAMASK_PRIVATE_KEY}"
-          echo "=== Deploy key setup complete ==="
+      - name: Run dynamic pricing script
+        env:
+          METAMASK_PRIVATE_KEY: ${{ secrets.METAMASK_PRIVATE_KEY }}
+          SEPOLIA_URL: ${{ secrets.SEPOLIA_URL }}
+          CONTRACT_ADDRESS: ${{ secrets.CONTRACT_ADDRESS }}
+          QWEN_API_KEY: ${{ secrets.QWEN_API_KEY }}
+          HYPERSWARM_TOPIC: ${{ secrets.HYPERSWARM_TOPIC }}
         run: |
           echo "=== Starting Dynamic Pricing ==="
           echo "=== Environment Variables Check ==="
-          printenv | grep -i "key"
+          printenv | grep -i "key"  # Secrets won't show here (normal)
           echo "=== Running Script ==="
           node backend/dynamic_pricing.js
           echo "=== Script Completed ==="
