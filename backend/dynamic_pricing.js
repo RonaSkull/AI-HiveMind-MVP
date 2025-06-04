@@ -1,4 +1,21 @@
-import { ethers } from "ethers";
+const { ethers } = require('ethers');
+
+// Check required environment variables
+if (!process.env.METAMASK_PRIVATE_KEY) {
+    throw new Error("METAMASK_PRIVATE_KEY is missing");
+}
+if (!process.env.SEPOLIA_URL) {
+    throw new Error("SEPOLIA_URL is missing");
+}
+if (!process.env.CONTRACT_ADDRESS) {
+    throw new Error("CONTRACT_ADDRESS is missing");
+}
+if (!process.env.QWEN_API_KEY) {
+    throw new Error("QWEN_API_KEY is missing");
+}
+if (!process.env.HYPERSWARM_TOPIC) {
+    throw new Error("HYPERSWARM_TOPIC is missing");
+}
 import dotenv from 'dotenv';
 
 // Load environment variables from .env file for local development
