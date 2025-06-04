@@ -8,6 +8,10 @@ on:
 jobs:
   dynamic-pricing:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      secrets: read
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -18,7 +22,17 @@ jobs:
           node-version: '16'
 
       - name: Install dependencies
-        run: npm ci
+        run: |
+          echo "=== Installing Dependencies ==="
+          npm ci
+          echo "=== Dependencies Installed ==="
+
+      - name: List files for debugging
+        run: |
+          echo "=== Directory Contents ==="
+          ls -la
+          echo "=== Backend Directory ==="
+          ls -la backend
 
       - name: Run dynamic pricing script
         env:
@@ -27,4 +41,10 @@ jobs:
           CONTRACT_ADDRESS: ${{ secrets.CONTRACT_ADDRESS }}
           QWEN_API_KEY: ${{ secrets.QWEN_API_KEY }}
           HYPERSWARM_TOPIC: ${{ secrets.HYPERSWARM_TOPIC }}
-        run:   echo           echo "=== Starting Dynamic Pricing ==="   echo           node backend/dynamic_pricing.js   echo           echo "=== Dynamic Pricing Complete ==="
+        run: |
+          echo "=== Starting Dynamic Pricing ==="
+          echo "=== Environment Variables Check ==="
+          printenv | grep -i "key"
+          echo "=== Running Script ==="
+          node backend/dynamic_pricing.js
+          echo "=== Script Completed ==="
