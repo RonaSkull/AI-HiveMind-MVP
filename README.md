@@ -8,7 +8,7 @@ A self-sustaining, decentralized AI economy where **Qwen generates and evolves d
 - **Goal**: Build a closed-loop AI economy where **AI actors trade with each other**, generating profits for humans without manual intervention.  
 - **Tech Stack**:  
   - **Qwen AI**: Generates NFT metadata (poems, code, prompts).  
-  - **Pear.js**: Coordinates P2P transactions between AIs.  
+  - **Hyperswarm**: Used for P2P connections between AI agents (leveraging Pear.js principles).  
   - **GitMCP**: Enables Qwen to autonomously improve code.  
   - **Sepolia Testnet**: Deploy smart contracts and earn ETH/USDT.  
 
@@ -19,8 +19,9 @@ AI-HiveMind-MVP/
 ├── smart-contracts/ # Solidity contracts for NFT trading
 │ └── AINFTVault.sol # Core contract for minting/sales
 ├── backend/ # AI generation + P2P coordination
-│ ├── mint-nft.js # Qwen-driven NFT generation
-│ └── pear-nft-swarm.js # Pear.js swarm for AI-to-AI transactions
+│ ├── pear-nft-swarm.js # Main AI agent: P2P (Hyperswarm), NFT metadata (Qwen), minting & announcements.
+│ ├── p2p-client-test.js # Test client for `pear-nft-swarm.js`.
+│ └── (mint-nft.js) # Optional: Standalone script for direct Qwen-driven NFT generation (if still used).
 ├── reports/ # Daily AI-generated revenue reports
 │ └── daily_report.md
 ├── .gitmcp.json # GitMCP integration for Qwen
@@ -39,22 +40,24 @@ cd AI-HiveMind-MVP
 2. Deploy Smart Contract
 Use Remix IDE to deploy smart-contracts/AINFTVault.sol to Sepolia .
 Replace 0xYourWalletHere in the contract with your MetaMask wallet address .
-
+ 
 3. Install Dependencies
-npm install ethers pear
+npm install ethers hyperswarm dotenv
 
 4. Run AI NFT Engine
-Update backend/mint-nft.js with your contract address and ABI:
-const provider = new ethers.providers.Web3Provider(window.ethereum);
-const signer = provider.getSigner();
-const contract = new ethers.Contract("YOUR_CONTRACT_ADDRESS", abi, signer);
+Create a `.env.development` file in the project root. Populate it with your `SEPOLIA_URL`, `PRIVATE_KEY`, `CONTRACT_ADDRESS`, and `QWEN_API_KEY`. The scripts will load configuration from this file.
+Example `.env.development` structure:
+   SEPOLIA_URL=https_your_sepolia_rpc_url
+   PRIVATE_KEY=your_wallet_private_key_without_0x_prefix
+   CONTRACT_ADDRESS=your_ainftvault_contract_address_on_sepolia
+   QWEN_API_KEY=your_qwen_openrouter_api_key
+   DEPLOYER_ADDRESS=your_wallet_public_address_optional_for_reference
 
-Run the engine:
-node backend/mint-nft.js
+Run the main AI agent (Server):
+   node backend/pear-nft-swarm.js
 
-5. Start AI Swarm
-Run the Pear.js swarm to simulate AI buyers:
-node backend/pear-nft-swarm.js
+6. Test with P2P Client (in a separate terminal, optional):
+   node backend/p2p-client-test.js
 
 6. Monitor Profits
 Use the React Native app in Expo Snack to track revenue.
@@ -114,8 +117,8 @@ With **compounding** (reinvesting 10% of profits), you can hit **$50K in under 5
 4. Replace `0xYourWalletHere` in the contract with your wallet address.  
 
 ### 🧪 **Step 3: Update Backend Scripts**  
-1. In `backend/mint-nft.js` and `backend/pear-nft-swarm.js`, replace `YOUR_QWEN_API_KEY` with your actual Qwen API key.  
-2. Update the contract address and ABI in `mint-nft.js`.  
+1. Ensure `QWEN_API_KEY`, `SEPOLIA_URL`, `PRIVATE_KEY`, and `CONTRACT_ADDRESS` are correctly set in your `.env.development` file in the project root (see example in earlier setup steps).  
+2. The scripts automatically load these values from `.env.development`. The contract ABI is typically loaded from the compiled artifact JSON file (e.g., `AINFTVault.json`) by the scripts.  
 
 ### 🧩 **Step 4: Add Secrets to GitHub**  
 Go to [GitHub Secrets](https://github.com/RonaSkull/AI-HiveMind-MVP/settings/secrets/actions ):  
