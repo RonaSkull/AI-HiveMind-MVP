@@ -1,9 +1,9 @@
 name: AI Dynamic Pricing
 
 on:
-  workflow_dispatch:  # Allow manual trigger
-  branches:
-    - main
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * *'  # Run daily at midnight
 
 jobs:
   dynamic-pricing:
@@ -16,19 +16,15 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '16'
-          cache: 'npm'
 
       - name: Install dependencies
         run: npm ci
 
       - name: Run dynamic pricing script
         env:
-          SEPOLIA_URL: ${{ secrets.SEPOLIA_URL }}
           METAMASK_PRIVATE_KEY: ${{ secrets.METAMASK_PRIVATE_KEY }}
+          SEPOLIA_URL: ${{ secrets.SEPOLIA_URL }}
           CONTRACT_ADDRESS: ${{ secrets.CONTRACT_ADDRESS }}
           QWEN_API_KEY: ${{ secrets.QWEN_API_KEY }}
           HYPERSWARM_TOPIC: ${{ secrets.HYPERSWARM_TOPIC }}
-        run: |
-          echo "Starting dynamic pricing adjustment..."
-          node backend/dynamic_pricing.js
-          echo "Dynamic pricing adjustment completed"
+        run:   echo           echo "=== Starting Dynamic Pricing ==="   echo           node backend/dynamic_pricing.js   echo           echo "=== Dynamic Pricing Complete ==="
