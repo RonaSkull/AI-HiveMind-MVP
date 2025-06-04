@@ -1,0 +1,57 @@
+name: Fix Workflows
+
+on:
+  workflow_dispatch:
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Remove old workflows
+        run: |
+          rm -f .github/workflows/*.yml
+
+      - name: Create new workflow
+        run: |
+          echo "name: AI Dynamic Pricing" > .github/workflows/ai-dynamic-pricing.yml
+          echo "" >> .github/workflows/ai-dynamic-pricing.yml
+          echo "on:" >> .github/workflows/ai-dynamic-pricing.yml
+          echo "  workflow_dispatch:" >> .github/workflows/ai-dynamic-pricing.yml
+          echo "  schedule:" >> .github/workflows/ai-dynamic-pricing.yml
+          echo "    - cron: '0 0 * * *'" >> .github/workflows/ai-dynamic-pricing.yml
+          echo "" >> .github/workflows/ai-dynamic-pricing.yml
+          echo "jobs:" >> .github/workflows/ai-dynamic-pricing.yml
+          echo "  dynamic-pricing:" >> .github/workflows/ai-dynamic-pricing.yml
+          echo "    runs-on: ubuntu-latest" >> .github/workflows/ai-dynamic-pricing.yml
+          echo "    steps:" >> .github/workflows/ai-dynamic-pricing.yml
+          echo "      - name: Checkout code" >> .github/workflows/ai-dynamic-pricing.yml
+          echo "        uses: actions/checkout@v4" >> .github/workflows/ai-dynamic-pricing.yml
+          echo "" >> .github/workflows/ai-dynamic-pricing.yml
+          echo "      - name: Set up Node.js" >> .github/workflows/ai-dynamic-pricing.yml
+          echo "        uses: actions/setup-node@v4" >> .github/workflows/ai-dynamic-pricing.yml
+          echo "        with:" >> .github/workflows/ai-dynamic-pricing.yml
+          echo "          node-version: '16'" >> .github/workflows/ai-dynamic-pricing.yml
+          echo "" >> .github/workflows/ai-dynamic-pricing.yml
+          echo "      - name: Install dependencies" >> .github/workflows/ai-dynamic-pricing.yml
+          echo "        run: npm ci" >> .github/workflows/ai-dynamic-pricing.yml
+          echo "" >> .github/workflows/ai-dynamic-pricing.yml
+          echo "      - name: Run dynamic pricing script" >> .github/workflows/ai-dynamic-pricing.yml
+          echo "        env:" >> .github/workflows/ai-dynamic-pricing.yml
+          echo "          METAMASK_PRIVATE_KEY: ${{ secrets.METAMASK_PRIVATE_KEY }}" >> .github/workflows/ai-dynamic-pricing.yml
+          echo "          SEPOLIA_URL: ${{ secrets.SEPOLIA_URL }}" >> .github/workflows/ai-dynamic-pricing.yml
+          echo "          CONTRACT_ADDRESS: ${{ secrets.CONTRACT_ADDRESS }}" >> .github/workflows/ai-dynamic-pricing.yml
+          echo "          QWEN_API_KEY: ${{ secrets.QWEN_API_KEY }}" >> .github/workflows/ai-dynamic-pricing.yml
+          echo "          HYPERSWARM_TOPIC: ${{ secrets.HYPERSWARM_TOPIC }}" >> .github/workflows/ai-dynamic-pricing.yml
+          echo "        run: |" >> .github/workflows/ai-dynamic-pricing.yml
+          echo "          echo \"=== Starting Dynamic Pricing ===\"" >> .github/workflows/ai-dynamic-pricing.yml
+          echo "          node backend/dynamic_pricing.js" >> .github/workflows/ai-dynamic-pricing.yml
+          echo "          echo \"=== Dynamic Pricing Complete ===\"" >> .github/workflows/ai-dynamic-pricing.yml
+
+      - name: Stage changes
+        run: |
+          git add .
+          git commit -m "fix: Simplify workflows"
+          git push origin main --force
