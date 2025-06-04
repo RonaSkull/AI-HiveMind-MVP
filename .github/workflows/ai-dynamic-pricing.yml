@@ -8,9 +8,6 @@ on:
 jobs:
   dynamic-pricing:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      secrets: read
 
     steps:
       - name: Checkout code
