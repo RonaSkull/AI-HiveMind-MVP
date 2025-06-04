@@ -24,9 +24,24 @@ jobs:
       - name: Install dependencies
         run: |
           cd backend
+          echo "=== Starting dependency installation ==="
+          echo "Node.js version:"
+          node --version
+          echo ""
+          echo "npm version:"
+          npm --version
+          echo ""
+          echo "Current directory:"
+          pwd
+          echo ""
+          echo "Files in current directory:"
+          ls -la
+          echo ""
           echo "Installing dependencies..."
-          npm ci
-          echo "Dependencies installed successfully"
+          npm ci --verbose
+          echo "=== Dependencies installed ==="
+          echo "Installed packages:"
+          npm list
 
       - name: Run pricing script
         env:
