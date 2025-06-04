@@ -9,8 +9,9 @@ jobs:
   update-price:
     runs-on: ubuntu-latest
     permissions:
-      contents: read # Allow checkout
-      secrets: read # Explicitly request read-only access to secrets
+      contents: read
+      secrets: read
+      id-token: write
 
     steps:
       - name: Checkout repository
