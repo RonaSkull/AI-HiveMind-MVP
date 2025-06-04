@@ -18,7 +18,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '16'
 
       - name: Install dependencies and run pricing script
         env:
@@ -27,6 +27,12 @@ jobs:
           SEPOLIA_URL: ${{ secrets.SEPOLIA_URL }} # Your Sepolia RPC URL
           CONTRACT_ADDRESS: ${{ secrets.CONTRACT_ADDRESS }} # Deployed AINFTVault contract address
         run: |
+          cd backend
+          echo "Installing dependencies..."
+          npm install
+          
+          echo "Running dynamic pricing script..."
+          node dynamic_pricing.js
           echo "Installing dependencies..."
           cd backend
           npm install
