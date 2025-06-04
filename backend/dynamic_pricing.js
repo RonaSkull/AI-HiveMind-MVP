@@ -6,7 +6,19 @@ const privateKey = process.env.METAMASK_PRIVATE_KEY;
 const contractAddress = process.env.CONTRACT_ADDRESS;
 
 if (!privateKey || !rpcUrl || !contractAddress) {
-  console.error("Error: Missing required environment variables. Please set METAMASK_PRIVATE_KEY, SEPOLIA_URL, and CONTRACT_ADDRESS in GitHub Secrets.");
+  console.error("=== ERROR: Missing required environment variables ===");
+  console.error("Please set the following variables in GitHub Secrets:");
+  console.error("- METAMASK_PRIVATE_KEY (current value: " + (privateKey ? "SET" : "MISSING") + ")");
+  console.error("- SEPOLIA_URL (current value: " + (rpcUrl ? "SET" : "MISSING") + ")");
+  console.error("- CONTRACT_ADDRESS (current value: " + (contractAddress ? "SET" : "MISSING") + ")");
+  console.error("\nCurrent values:");
+  console.error("- METAMASK_PRIVATE_KEY: " + (privateKey ? "***SET***" : "MISSING"));
+  console.error("- SEPOLIA_URL: " + (rpcUrl || "MISSING"));
+  console.error("- CONTRACT_ADDRESS: " + (contractAddress || "MISSING"));
+  console.error("\nTo set these variables:");
+  console.error("1. Go to your GitHub repository -> Settings -> Secrets and variables -> Actions");
+  console.error("2. Click 'New repository secret' for each variable");
+  console.error("3. Copy the values from your .env.development file");
   process.exit(1);
 }
 
