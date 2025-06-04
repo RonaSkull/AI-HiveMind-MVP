@@ -3,15 +3,18 @@
   "version": "1.0.0",
   "description": "AI HiveMind MVP Smart Contracts",
   "type": "module",
-  "main": "index.js",
+  "main": "backend/dynamic_pricing.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "deploy": "NODE_ENV=development hardhat run scripts/deploy.js --network sepolia"
+    "deploy": "NODE_ENV=development hardhat run scripts/deploy.js --network sepolia",
+    "price": "node backend/dynamic_pricing.js"
   },
   "dependencies": {
-    "ethers": "^5.8.0",
+    "ethers": "5.7.2",
     "pear": "^1.0.0",
-    "hyperswarm": "^4.8.1"
+    "hyperswarm": "^4.8.1",
+    "@actions/core": "^1.10.0",
+    "@actions/github": "^5.1.1"
   },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.2.2",

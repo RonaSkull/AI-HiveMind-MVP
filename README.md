@@ -48,25 +48,17 @@ npm install ethers hyperswarm dotenv
 
 ### Environment Variables
 
-Create a `.env.development` file in the project root with these environment variables:
+This project uses several environment variables for configuration. These should be set up as GitHub Secrets rather than in a `.env` file:
 
-#### Ethereum Network Configuration
-- `SEPOLIA_URL`: Sepolia RPC URL (e.g., https://eth-sepolia.public.blastapi.io)
+1. Go to your repository settings -> Secrets and variables -> Actions
+2. Add these secrets:
+   - `SEPOLIA_URL`: Sepolia RPC URL
+   - `METAMASK_PRIVATE_KEY`: Private key for the revenue wallet
+   - `CONTRACT_ADDRESS`: Deployed AINFTVault contract address
+   - `QWEN_API_KEY`: Qwen API key for AI integration
+   - `HYPERSWARM_TOPIC`: Hyperswarm topic for P2P communication
 
-#### Wallet Configuration
-- `METAMASK_PRIVATE_KEY`: Private key for the revenue wallet
-- `DEPLOYER_ADDRESS`: Deployer wallet address
-
-#### Smart Contract Configuration
-- `CONTRACT_ADDRESS`: Deployed AINFTVault contract address
-
-#### AI Configuration
-- `QWEN_API_KEY`: Qwen API key for AI integration
-
-#### P2P Swarm Configuration
-- `HYPERSWARM_TOPIC`: Hyperswarm topic for P2P communication (e.g., ai-nft-market-v3)
-
-**Important**: Never commit `.env` or `.env.development` files to version control. These should be kept secure and only shared through secure channels.
+**Important**: Never commit sensitive values to version control. All sensitive configuration should be handled through GitHub Secrets.
 
 5. Install Dependencies
 ```bash
