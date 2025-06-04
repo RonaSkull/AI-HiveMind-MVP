@@ -1,6 +1,24 @@
 import { ethers } from "ethers";
-import dotenv from 'dotenv';
-dotenv.config({ path: '../.env.development' }); // Load .env from root
+
+// Get environment variables directly from process.env
+const rpcUrl = process.env.SEPOLIA_URL;
+const privateKey = process.env.METAMASK_PRIVATE_KEY;
+const contractAddress = process.env.CONTRACT_ADDRESS;
+
+if (!privateKey || !rpcUrl || !contractAddress) {
+  console.error("Error: Missing required environment variables. Please set METAMASK_PRIVATE_KEY, SEPOLIA_URL, and CONTRACT_ADDRESS in GitHub Secrets.");
+  process.exit(1);
+}
+
+// Get environment variables directly from process.env
+const rpcUrl = process.env.SEPOLIA_URL;
+const privateKey = process.env.METAMASK_PRIVATE_KEY;
+const contractAddress = process.env.CONTRACT_ADDRESS;
+
+if (!privateKey || !rpcUrl || !contractAddress) {
+  console.error("Error: Missing required environment variables. Please set METAMASK_PRIVATE_KEY, SEPOLIA_URL, and CONTRACT_ADDRESS in GitHub Secrets.");
+  process.exit(1);
+}
 
 // PLACEHOLDER: "abi": 
 const contractABI = [ // The ENTIRE JSON ABI from AINFTVault.json starts here
@@ -243,13 +261,12 @@ const contractABI = [ // The ENTIRE JSON ABI from AINFTVault.json starts here
     }
   ];
 
-// PLACEHOLDER: Replace with your deployed contract address
-const contractAddress = process.env.CONTRACT_ADDRESS || "YOUR_CONTRACT_ADDRESS";
-const privateKey = process.env.METAMASK_PRIVATE_KEY || process.env.PRIVATE_KEY; // Prioritize METAMASK_PRIVATE_KEY for GHA, fallback to PRIVATE_KEY from .env
-const rpcUrl = process.env.SEPOLIA_URL; // Using SEPOLIA_URL from .env
+const rpcUrl = process.env.SEPOLIA_URL;
+const privateKey = process.env.METAMASK_PRIVATE_KEY;
+const contractAddress = process.env.CONTRACT_ADDRESS;
 
-if (!privateKey || !rpcUrl || contractAddress === "YOUR_CONTRACT_ADDRESS") {
-  console.error("Error: Please set METAMASK_PRIVATE_KEY (for GHA) or PRIVATE_KEY (for local) and SEPOLIA_URL in .env.development, and update contractAddress.");
+if (!privateKey || !rpcUrl || !contractAddress) {
+  console.error("Error: Missing required environment variables. Please set METAMASK_PRIVATE_KEY, SEPOLIA_URL, and CONTRACT_ADDRESS in GitHub Secrets.");
   process.exit(1);
 }
 
