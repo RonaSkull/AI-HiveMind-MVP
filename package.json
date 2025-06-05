@@ -14,13 +14,13 @@
     "@actions/github": "^5.1.1",
     "ethers": "^5.8.0",
     "hyperswarm": "^4.8.1",
-    "pear": "^1.0.0"
+    "pear": "^1.0.0",
+    "dotenv": "^16.5.0"
   },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.2.2",
     "@nomiclabs/hardhat-waffle": "^2.0.3",
     "chai": "^4.3.7",
-    "dotenv": "^16.5.0",
     "hardhat": "^2.17.0"
   }
 }
