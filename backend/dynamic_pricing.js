@@ -173,7 +173,7 @@ async function main() {
         console.log(`Current block number: ${blockNumber}`);
         
         const balance = await provider.getBalance(wallet.address);
-        console.log(`Wallet balance: ${ethers.formatEther(balance)} ETH`);
+        console.log(`Wallet balance: ${ethers.utils.formatEther(balance)} ETH`);
         
         console.log("\n=== Connecting to Contract ===");
         const contract = new ethers.Contract(contractAddress, contractABI, wallet);
@@ -189,13 +189,13 @@ async function main() {
         
         console.log(`Last known transaction count (from file): ${lastKnownTxCount}`);
         console.log(`Current transaction count (from contract): ${currentTxCount}`);
-        console.log(`Current minimum price (from contract): ${ethers.formatEther(currentMinimumPriceBigInt)} ETH`);
-        console.log(`Price increment set to: ${ethers.formatEther(priceIncrement)} ETH`);
+        console.log(`Current minimum price (from contract): ${ethers.utils.formatEther(currentMinimumPriceBigInt)} ETH`);
+        console.log(`Price increment set to: ${ethers.utils.formatEther(priceIncrement)} ETH`);
 
         if (currentTxCount > lastKnownTxCount) {
             console.log(`\n=== New Transactions Detected (${currentTxCount} > ${lastKnownTxCount}). Adjusting Minimum Price ===`);
             const newMinimumPrice = currentMinimumPriceBigInt + priceIncrement;
-            console.log(`Calculated new minimum price: ${ethers.formatEther(newMinimumPrice)} ETH`);
+            console.log(`Calculated new minimum price: ${ethers.utils.formatEther(newMinimumPrice)} ETH`);
 
             try {
                 console.log("Attempting to call setMinimumPrice...");
@@ -206,7 +206,7 @@ async function main() {
                 console.log(`Transaction confirmed in block: ${receipt.blockNumber}`);
                 
                 const updatedPrice = await contract.minimumPrice();
-                console.log(`Successfully updated minimum price on contract. New minimum price: ${ethers.formatEther(updatedPrice)} ETH`);
+                console.log(`Successfully updated minimum price on contract. New minimum price: ${ethers.utils.formatEther(updatedPrice)} ETH`);
             } catch (e) {
                 console.error("Failed to set new minimum price on contract:", e);
                 console.error("This could be due to permissions (wallet not being revenueWallet) or other contract constraints.");
