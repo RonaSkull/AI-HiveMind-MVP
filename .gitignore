@@ -14,12 +14,19 @@ sensitive-values.txt
 *.sensitive
 *.secrets
 
-# Hardhat cache
+# Hardhat cache and build artifacts
 cache/
+artifacts/build-info/
+artifacts/smart-contracts/
+typechain-types/
 
 # Build output
 build/
 dist/
+
+# Hardhat generated files
+coverage/
+coverage.json
 
 # Logs
 logs/
@@ -43,6 +50,9 @@ yarn-error.log*
 
 # Dynamic pricing script state
 backend/lastTransactionCount.json
+
+# Virtual Environment
+.venv-crewai/
 
 # OS
 .DS_Store
