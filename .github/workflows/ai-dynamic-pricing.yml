@@ -71,8 +71,11 @@ jobs:
           # Only show non-sensitive environment variables
           printenv | grep -v -i "key\|secret\|private"
           
+          echo "=== Installing Dependencies ==="
+          npm ci
+          
           echo "=== Running Script ==="
-          node backend/dynamic_pricing.js
+          NODE_OPTIONS='--experimental-vm-modules' node --experimental-modules backend/dynamic_pricing.js
           
           if [ $? -ne 0 ]; then
             echo "Error: Script execution failed"

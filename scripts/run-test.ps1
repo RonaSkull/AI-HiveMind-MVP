@@ -1,12 +1,15 @@
-# Set environment variables
-$env:SEPOLIA_URL = "https://eth-sepolia.public.blastapi.io"
-$env:METAMASK_PRIVATE_KEY = "0x05a4743525020c3a85057939ebfb283b5a1d08f26854265e0e849a98725d69b3"
-$env:CONTRACT_ADDRESS = "0xa0f536d1d1a8Bf63e200344Bda8a34b6d012745b"
-$env:QWEN_API_KEY = "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"
-$env:HYPERSWARM_TOPIC = "ai-nft-market-v3"
-$env:MINIMUM_PRICE = "0.01"
-$env:PRICE_INCREMENT = "0.01"
+# This script runs the dynamic_pricing.js script.
+# It relies on the .env.development file in the project root (d:\AI-HiveMind-MVP\.env.development)
+# for all necessary environment variables.
 
-# Navigate to backend directory and run the test
+# Ensure your .env.development file is correctly configured with:
+# SEPOLIA_URL, METAMASK_PRIVATE_KEY, CONTRACT_ADDRESS, QWEN_API_KEY, HYPERSWARM_TOPIC, MINIMUM_PRICE, PRICE_INCREMENT
+
+Write-Host "Navigating to backend directory..."
 Set-Location -Path "$PSScriptRoot\..\backend"
-node test-dynamic-pricing.js
+
+Write-Host "Attempting to run dynamic_pricing.js..."
+Write-Host "Please ensure d:\AI-HiveMind-MVP\.env.development is correctly populated with all required variables."
+
+# Run the dynamic pricing script. It will load environment variables from ../.env.development
+node dynamic_pricing.js

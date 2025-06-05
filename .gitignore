@@ -14,6 +14,9 @@ sensitive-values.txt
 *.sensitive
 *.secrets
 
+# Hardhat cache
+cache/
+
 # Build output
 build/
 dist/
@@ -37,6 +40,9 @@ yarn-error.log*
 *.sln.docstates
 *.sublime-workspace
 *.sublime-project
+
+# Dynamic pricing script state
+backend/lastTransactionCount.json
 
 # OS
 .DS_Store
