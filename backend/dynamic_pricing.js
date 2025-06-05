@@ -161,7 +161,7 @@ async function main() {
         if (!rpcUrl || !privateKey || !contractAddress || !priceIncrementStr) {
             throw new Error("Missing required environment variables (RPC, Key, Contract Address, or Price Increment). Please check your configuration.");
         }
-        const priceIncrement = ethers.parseEther(priceIncrementStr);
+        const priceIncrement = ethers.utils.parseEther(priceIncrementStr);
 
         console.log("=== Setting up provider and wallet ===");
         const provider = new ethers.JsonRpcProvider(rpcUrl);
