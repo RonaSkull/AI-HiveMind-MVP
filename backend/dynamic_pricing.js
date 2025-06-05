@@ -164,7 +164,7 @@ async function main() {
         const priceIncrement = ethers.utils.parseEther(priceIncrementStr);
 
         console.log("=== Setting up provider and wallet ===");
-        const provider = new ethers.JsonRpcProvider(rpcUrl);
+        const provider = new ethers.providers.JsonRpcProvider(rpcUrl);
         const wallet = new ethers.Wallet(privateKey, provider);
         
         console.log(`Connected with wallet: ${wallet.address}`);
