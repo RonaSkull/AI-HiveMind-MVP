@@ -65,6 +65,7 @@ jobs:
           CONTRACT_ADDRESS: ${{ secrets.CONTRACT_ADDRESS }}
           QWEN_API_KEY: ${{ secrets.QWEN_API_KEY }}
           HYPERSWARM_TOPIC: ${{ secrets.HYPERSWARM_TOPIC }}
+          PRICE_INCREMENT: ${{ secrets.PRICE_INCREMENT }}
         run: |
           echo "=== Starting Dynamic Pricing ==="
           echo "=== Environment Variables Check ==="
