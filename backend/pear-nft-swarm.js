@@ -19,7 +19,11 @@ if (!process.env.QWEN_API_KEY || !process.env.QWEN_API_KEY.startsWith('sk-or-v1-
 
 // Setup provider and signer for blockchain interaction
 const provider = new ethers.providers.JsonRpcProvider(process.env.SEPOLIA_URL);
-const privateKey = process.env.PRIVATE_KEY.startsWith('0x') ? process.env.PRIVATE_KEY : '0x' + process.env.PRIVATE_KEY;
+if (!process.env.METAMASK_PRIVATE_KEY) { 
+  console.error('Error: METAMASK_PRIVATE_KEY is not set in .env.development.');
+  process.exit(1);
+}
+const privateKey = process.env.METAMASK_PRIVATE_KEY.startsWith('0x') ? process.env.METAMASK_PRIVATE_KEY : '0x' + process.env.METAMASK_PRIVATE_KEY;
 const signer = new ethers.Wallet(privateKey, provider);
 console.log(`AI Agent Address (Signer): ${signer.address}`);
 
@@ -31,7 +35,7 @@ const contract = new ethers.Contract(process.env.CONTRACT_ADDRESS, abi, signer);
 
 // Hyperswarm P2P setup
 const swarm = new Hyperswarm();
-const topicString = 'ai-nft-market-v3'; // New topic for hyperswarm
+const topicString = process.env.HYPERSWARM_TOPIC || 'ai-nft-market-fallback-topic'; 
 const topicBuffer = Buffer.alloc(32).fill(topicString);
 console.log('AI Agent joining Hyperswarm topic:', topicString);
 
@@ -43,9 +47,9 @@ swarm.join(topicBuffer, {
 swarm.on('connection', async (socket, peerInfo) => {
   console.log('New P2P connection from:', peerInfo.publicKey.toString('hex'));
   try {
-    // 1. Generate NFT metadata using OpenRouter
-    console.log('Generating NFT metadata via OpenRouter...');
-    let generatedMetadata;
+    // 1. Generate NFT metadata using OpenRouter (for announcement, not directly for minting if using mintNFTForSelf)
+    console.log('Generating NFT metadata via OpenRouter for announcement purposes...');
+    let generatedMetadataForAnnouncement;
     try {
       const openRouterResponse = await fetch('https://openrouter.ai/api/v1/chat/completions', {
         method: 'POST',
@@ -58,7 +62,7 @@ swarm.on('connection', async (socket, peerInfo) => {
         body: JSON.stringify({
           model: 'qwen/qwq-32b:free', // Or any other model you prefer
           messages: [
-            { role: 'user', content: 'Generate a compelling description for a unique digital art piece about symbiotic AI.' }
+            { role: 'user', content: 'Generate a compelling description for a unique digital art piece about symbiotic AI.' } // Consider making this prompt dynamic
           ]
         })
       });
@@ -72,35 +76,48 @@ swarm.on('connection', async (socket, peerInfo) => {
           console.error('OpenRouter API response does not contain expected content:', data);
           throw new Error('Invalid response structure from OpenRouter API');
       }
-      generatedMetadata = data.choices[0].message.content;
-      console.log('Metadata generated:', generatedMetadata.substring(0, 100) + '...');
+      generatedMetadataForAnnouncement = data.choices[0].message.content;
+      console.log('Metadata for announcement generated:', generatedMetadataForAnnouncement.substring(0, 100) + '...');
     } catch (error) {
-      console.error('Failed to fetch metadata from OpenRouter:', error);
-      socket.write(JSON.stringify({ error: 'Failed to generate metadata' }));
-      return; // Stop if metadata generation fails
+      console.error('Failed to fetch metadata from OpenRouter for announcement:', error);
+      // Decide if this is fatal for the interaction. Maybe proceed without off-chain metadata.
+      generatedMetadataForAnnouncement = "AI generated content - details pending on-chain."; 
     }
 
-    // 2. Mint the NFT using the AINFTVault contract
-    console.log('Minting NFT on Sepolia via contract:', process.env.CONTRACT_ADDRESS);
-    const initialPrice = ethers.utils.parseEther("0.01"); // Example price
-    const tx = await contract.mintNFT(generatedMetadata, initialPrice);
+    // 2. Mint the NFT using the AINFTVault contract's mintNFTForSelf method
+    console.log('Minting NFT on Sepolia via contract (mintNFTForSelf):', process.env.CONTRACT_ADDRESS);
+    const initialPriceForMinting = ethers.utils.parseEther("0.01"); // Define an initial price, must be >= contract.minimumPrice()
+    // TODO: Consider fetching contract.minimumPrice() and using it or ensuring initialPriceForMinting respects it.
+    const tx = await contract.mintNFTForSelf(initialPriceForMinting); // Pass initial price
     const receipt = await tx.wait();
     console.log('NFT Minted! Transaction Hash:', tx.hash);
     
-    // Extract NFT ID from events (assuming NFTMinted event exists with 'id')
+    // Extract NFT ID and other details from events
     let nftId = 'Unknown';
+    let mintedPrice = 'N/A'; // Price set by contract
+    let metadataURIFromEvent = 'N/A'; // Metadata URI set by contract
+
     const mintEvent = receipt.events?.find(e => e.event === 'NFTMinted');
     if (mintEvent && mintEvent.args) {
-        nftId = mintEvent.args.id.toString();
+        nftId = mintEvent.args.tokenId.toString(); // CORRECTED: tokenId
+        mintedPrice = ethers.utils.formatEther(mintEvent.args.price);
+        metadataURIFromEvent = mintEvent.args.metadataURI;
         console.log('Minted NFT ID:', nftId);
+        console.log('Minted Price (from event):', mintedPrice, 'ETH');
+        console.log('Metadata URI (from event):', metadataURIFromEvent);
+    } else {
+        console.warn('NFTMinted event not found or args missing. Check contract and event signature.');
     }
 
     // 3. Announce the newly minted NFT to the connected peer
+    // Use generatedMetadataForAnnouncement for summary, but acknowledge on-chain details might differ
     const announcement = {
       type: 'NFT_MINTED_ANNOUNCEMENT',
       nftId: nftId,
-      metadataSummary: generatedMetadata.substring(0, 100) + '...',
-      price: ethers.utils.formatEther(initialPrice) + ' ETH',
+      // Use off-chain generated metadata for a quick summary if available
+      metadataSummary: generatedMetadataForAnnouncement ? generatedMetadataForAnnouncement.substring(0, 100) + '...' : "See on-chain metadata.",
+      onChainMetadataURI: metadataURIFromEvent, // Add this for clarity
+      price: mintedPrice + ' ETH', // Price from the event
       owner: signer.address,
       contract: process.env.CONTRACT_ADDRESS
     };
