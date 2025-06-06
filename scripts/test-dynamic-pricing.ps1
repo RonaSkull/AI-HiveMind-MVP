@@ -1,12 +1,18 @@
-# Set environment variables
-$env:METAMASK_PRIVATE_KEY = "0x05a4743525020c3a85057939ebfb283b5a1d08f26854265e0e849a98725d69b3"
-$env:SEPOLIA_URL = "https://eth-sepolia.public.blastapi.io"
-$env:CONTRACT_ADDRESS = "0xa0f536d1d1a8Bf63e200344Bda8a34b6d012745b"
-$env:QWEN_API_KEY = "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"
-$env:HYPERSWARM_TOPIC = "ai-nft-market-v3"
+# This script tests the backend/dynamic_pricing.js script.
+#
+# IMPORTANT:
+# Ensure your .env.development file in the project root is correctly configured with:
+# - METAMASK_PRIVATE_KEY (this is the revenue wallet/admin key for setMinimumPrice)
+# - SEPOLIA_URL
+# - CONTRACT_ADDRESS
+# - PRICE_INCREMENT
 
-# Install dependencies
+Write-Host "Ensuring Node.js dependencies are up to date..."
 npm install
 
-# Run the script
+Write-Host "Running the dynamic pricing script (backend/dynamic_pricing.js)..."
+# The dynamic_pricing.js script will load necessary environment variables 
+# from the .env.development file using dotenv.
 node backend/dynamic_pricing.js
+
+Write-Host "Dynamic pricing script execution finished."

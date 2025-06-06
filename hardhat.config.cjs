@@ -1,24 +1,25 @@
-require('@nomiclabs/hardhat-ethers');
+require('@nomiclabs/hardhat-waffle'); // Reverted to ethers v5 compatible plugin
 const dotenv = require('dotenv');
 const path = require('path');
 
 // Load environment variables from .env.development
 dotenv.config({ path: path.resolve(__dirname, '.env.development') });
 
-// Debug log to verify private key is loaded
-console.log('Private key loaded:', process.env.METAMASK_PRIVATE_KEY ? 'Yes' : 'No');
-console.log('Private key length:', process.env.METAMASK_PRIVATE_KEY ? process.env.METAMASK_PRIVATE_KEY.length : 'Not found');
+// METAMASK_PRIVATE_KEY should be loaded via dotenv.
+// No console logs for private key details.
+
+const sepoliaPrivateKey = process.env.METAMASK_PRIVATE_KEY ? process.env.METAMASK_PRIVATE_KEY.replace(/^"|"$/g, '') : undefined;
 
 module.exports = {
-  solidity: '0.8.0',
+  solidity: '0.8.20',
   networks: {
     sepolia: {
-      url: 'https://ethereum-sepolia.publicnode.com', // PublicNode Sepolia RPC
-      chainId: 11155111, // Sepolia network ID
-      accounts: [process.env.METAMASK_PRIVATE_KEY ? process.env.METAMASK_PRIVATE_KEY.replace(/^"|"$/g, '') : ''], // Remove any surrounding quotes
-      timeout: 120000, // 2 minutes timeout for MetaMask
-      gas: 2100000,
-      gasPrice: 8000000000 // 8 gwei
+      url: process.env.SEPOLIA_RPC_URL || 'https://ethereum-sepolia.publicnode.com', // Allow override
+      chainId: 11155111,
+      accounts: sepoliaPrivateKey ? [sepoliaPrivateKey] : [],
+      timeout: 120000,
+      // gas: 2100000, // Consider removing or increasing if deployment issues occur
+      gasPrice: 8000000000
     }
   },
   paths: {
