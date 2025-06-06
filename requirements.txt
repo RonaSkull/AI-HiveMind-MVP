@@ -1,0 +1,42 @@
+# Core Dependencies
+crewai>=0.28.0
+langchain>=0.1.0
+langchain-openai>=0.0.2
+python-dotenv>=1.0.0
+
+# Web3 and Blockchain
+web3>=6.0.0  # Using newer version with POA middleware fixes
+eth-account>=0.8.0
+eth-typing>=3.0.0
+eth-utils>=2.2.1
+
+# Web Framework
+fastapi>=0.95.0
+uvicorn>=0.21.0
+python-multipart>=0.0.6
+
+# Authentication & Security
+python-jose[cryptography]>=3.3.0
+passlib[bcrypt]>=1.7.4
+
+# Database & Caching
+asyncpg>=0.27.0  # Async PostgreSQL client
+sqlalchemy[asyncio]>=2.0.0  # ORM with async support
+alembic>=1.11.0  # Database migrations
+redis>=4.5.0  # Redis client
+fakeredis>=2.10.0  # For testing
+
+# Data Validation & Serialization
+pydantic>=2.0.0
+orjson>=3.9.0  # Fast JSON library
+
+# Testing
+pytest>=7.3.1
+pytest-asyncio>=0.21.0
+pytest-cov>=4.0.0
+pytest-mock>=3.10.0
+
+# Development
+black>=23.0.0
+isort>=5.12.0
+mypy>=1.0.0

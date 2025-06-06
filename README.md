@@ -1,107 +1,276 @@
 # 🚀 AI-HiveMind-MVP  
 **Autonomous AI-to-AI NFT Minting & Trading Engine**  
-A self-sustaining, decentralized AI economy where **Qwen generates and evolves digital assets** (e.g., AI-generated poems, code, prompts) and **Pear.js coordinates peer-to-peer AI transactions**.  
+
+A self-sustaining, decentralized AI economy where **AI agents collaborate** to manage, price, and trade digital assets autonomously, using the **Model Context Protocol (MCP)** for seamless communication and shared context.
+
+## 🌟 Key Features
+
+- **Multi-Agent System (MAS)** with specialized agents for different tasks
+- **Model Context Protocol (MCP)** for shared context and agent communication
+- **Decentralized Architecture** with Redis for state management
+- **Autonomous NFT Management** with dynamic pricing and execution
+- **Extensible Design** for adding new agents and capabilities
 
 ---
 
 ## 🧠 Project Overview  
-- **Goal**: Build a closed-loop AI economy where **AI actors trade with each other**, generating profits for humans without manual intervention.  
-- **Tech Stack**:  
-  - **Qwen AI**: Generates NFT metadata (poems, code, prompts).  
-  - **Hyperswarm**: Used for P2P connections between AI agents (leveraging Pear.js principles).  
-  - **GitMCP**: Enables Qwen to autonomously improve code.  
-  - **Sepolia Testnet**: Deploy smart contracts and earn ETH/USDT.  
+
+### Core Components
+
+#### 1. Model Context Protocol (MCP)
+- **Context Manager**: Centralized context storage with Redis backend
+- **Agent State Management**: Track and manage agent states consistently
+- **Search & Retrieval**: Efficient context search by agent ID and metadata
+
+#### 2. Agent Architecture
+- **Base Agent**: Abstract class with lifecycle management and MCP integration
+- **Specialized Agents**:
+  - `VaultReaderAgent`: Monitors and reports on NFT vault state
+  - `PricingDecisionAgent`: Implements dynamic pricing strategies
+  - `PriceExecutionAgent`: Handles on-chain transactions
+
+#### 3. Tech Stack  
+- **Backend**: Python 3.11+
+- **Blockchain**: Web3.py, Sepolia Testnet
+- **Data**: Redis for context management
+- **AI**: CrewAI for agent orchestration
+- **Monitoring**: Structured logging and metrics
+
+#### 4. Key Features
+- **Autonomous Operation**: Agents work independently and collaboratively
+- **Fault Tolerance**: Graceful error handling and recovery
+- **Extensible**: Easy to add new agents and capabilities
+- **Observable**: Built-in monitoring and logging
 
 ---
 
 ## 📁 Repository Structure  
+```
 AI-HiveMind-MVP/
-├── smart-contracts/ # Solidity contracts for NFT trading
-│ └── AINFTVault.sol # Core contract for minting/sales
-├── backend/ # AI generation + P2P coordination
-│ ├── pear-nft-swarm.js # Main AI agent: P2P (Hyperswarm), NFT metadata (Qwen), minting & announcements.
-│ ├── p2p-client-test.js # Test client for `pear-nft-swarm.js`.
-│ ├── dynamic_pricing.js # Script to dynamically adjust NFT prices based on activity.
-│ └── (mint-nft.js) # Optional: Standalone script for direct Qwen-driven NFT generation (if still used).
-├── reports/ # Daily AI-generated revenue reports
-│ └── daily_report.md
-├── .gitmcp.json # GitMCP integration for Qwen
-├── .github/
-│ └── workflows/
-│   └── ai-dynamic-pricing.yml # GitHub Actions workflow for dynamic pricing
-└── README.md # This guide
+├── agents/                   # Agent implementations
+│   ├── __init__.py          # Package initialization
+│   ├── base_agent.py        # Base agent class with common functionality
+│   ├── vault_reader_agent.py # Vault monitoring agent
+│   ├── pricing_decision_agent.py # Pricing strategy agent
+│   └── price_execution_agent.py # Transaction execution agent
+│
+├── mcp/                     # Model Context Protocol
+│   ├── __init__.py
+│   └── context_manager.py   # Redis-based context management
+│
+├── smart-contracts/         # Solidity contracts
+│   └── AINFTVault.sol       # Core contract for NFT operations
+│
+├── tests/                   # Test suite
+│   ├── __init__.py
+│   └── test_context_manager.py
+│
+├── .env.development        # Local development environment
+├── .gitignore
+├── README.md                # This file
+├── requirements.txt         # Python dependencies
+└── setup.py                # Package configuration
+```
 
 ---
 
-## 🛠️ Setup Instructions
+## 🚀 Quick Start
 
-Follow these steps to get the AI-HiveMind-MVP project running locally and understand its deployment.
+### Prerequisites
 
-### 1. **Clone the Repository**
+- Python 3.11+
+- Redis Server
+- Node.js 16+ (for smart contract interaction)
+- Git
+
+### 1. Clone the Repository
+
 ```bash
 git clone https://github.com/RonaSkull/AI-HiveMind-MVP.git
 cd AI-HiveMind-MVP
 ```
 
-### 2. **Install Dependencies**
-Install all necessary project dependencies defined in `package.json`:
+### 2. Set Up Python Environment
+
 ```bash
-npm install
+# Create and activate virtual environment
+python -m venv venv
+.\venv\Scripts\activate  # Windows
+source venv/bin/activate  # Linux/Mac
+
+# Install dependencies
+pip install -e .[test]  # Install in development mode with test dependencies
 ```
-Or, for a cleaner install matching the lockfile (recommended for consistency):
+
+### 3. Configure Environment
+
+Create a `.env` file in the project root:
+
+```ini
+# Redis Configuration
+REDIS_URL=redis://localhost:6379/0
+
+# Blockchain Configuration
+WEB3_PROVIDER_URI=https://sepolia.infura.io/v3/YOUR_INFURA_PROJECT_ID
+PRIVATE_KEY=your_private_key_here
+CONTRACT_ADDRESS=0x...  # After deployment
+
+# Agent Configuration
+LOG_LEVEL=INFO
+```
+
+### 4. Start Redis
+
 ```bash
-npm ci
+# Using Docker (recommended)
+docker run --name redis -p 6379:6379 -d redis
+
+# Or install locally
+# Windows: https://github.com/tporadowski/redis/releases
+# Linux: sudo apt install redis-server
+# Mac: brew install redis
 ```
 
-### 3. **Set Up Local Environment Variables (`.env.development`)**
-For local development and testing, create a `.env.development` file in the project root. You can copy `.env.template` to get started:
+### 5. Run Tests
+
 ```bash
-cp .env.template .env.development
+pytest tests/ -v
 ```
-Populate `.env.development` with the following:
 
-*   `SEPOLIA_URL`: Your Sepolia RPC URL (e.g., from Infura or Alchemy).
-*   `METAMASK_PRIVATE_KEY`: The private key of the wallet you'll use for deploying the contract and acting as the `revenueWallet`.
-*   `DEPLOYER_ADDRESS`: The public Ethereum address corresponding to your `METAMASK_PRIVATE_KEY`. This is used by the deployment script for verification.
-*   `QWEN_API_KEY`: Your API key for the Qwen AI service.
-*   `HYPERSWARM_TOPIC`: A unique string for your Hyperswarm P2P network topic.
-*   `PRICE_INCREMENT`: The amount (in ETH, e.g., "0.001") by which the `dynamic_pricing.js` script should increment the NFT base price. This is also used by the GitHub Actions workflow.
-*   `CONTRACT_ADDRESS`: (Optional Initially) The address of the deployed `AINFTVault` smart contract. The `npm run deploy` script will automatically populate or update this in your `.env.development` file upon successful deployment.
+## 🤖 Agent Architecture
 
-**Example `.env.development`:**
+### Base Agent
+
+The `BaseAgent` class provides common functionality for all agents:
+
+```python
+from agents.base_agent import BaseAgent
+
+class MyAgent(BaseAgent):
+    def __init__(self, agent_id: str, mcp: MCPContextManager):
+        super().__init__(agent_id, mcp)
+        
+    async def _setup(self):
+        """Initialize agent-specific resources"""
+        pass
+        
+    async def _execute(self, task: Dict[str, Any]) -> Dict[str, Any]:
+        """Execute agent's main logic"""
+        pass
 ```
-SEPOLIA_URL="https://sepolia.infura.io/v3/YOUR_INFURA_PROJECT_ID"
-METAMASK_PRIVATE_KEY="your_metamask_private_key_here"
-DEPLOYER_ADDRESS="your_public_wallet_address_here"
-QWEN_API_KEY="your_qwen_api_key_here"
-HYPERSWARM_TOPIC="ai_hivemind_nft_swarm_unique_topic"
-PRICE_INCREMENT="0.001"
-# CONTRACT_ADDRESS will be filled by the deploy script
-```
-**Important**: Never commit your `.env.development` file or any file containing private keys to version control. It's already listed in `.gitignore`.
 
-### 4. **Deploy the Smart Contract (`AINFTVault.sol`)**
-The primary way to deploy the smart contract to the Sepolia testnet is using the provided Hardhat script:
+### Available Agents
+
+1. **VaultReaderAgent**
+   - Monitors NFT vault state
+   - Reports on metrics and events
+
+2. **PricingDecisionAgent**
+   - Implements dynamic pricing strategies
+   - Analyzes market conditions
+
+3. **PriceExecutionAgent**
+   - Handles on-chain transactions
+   - Manages gas fees and confirmations
+
+## 🔄 Model Context Protocol (MCP)
+
+The MCP provides shared context and communication between agents:
+
+```python
+from mcp.context_manager import MCPContextManager
+
+# Initialize with Redis
+mcp = MCPContextManager()
+
+# Update context
+context_id = mcp.update(
+    agent_id="my_agent",
+    data={"key": "value"},
+    ttl=3600  # Optional TTL in seconds
+)
+
+# Retrieve context
+context = mcp.get(context_id)
+
+
+# Search context
+results = mcp.search(agent_id="my_agent", limit=10)
+```
+
+## 🧪 Running the System
+
+### Start All Agents
+
 ```bash
-npm run deploy
+python -m agents.vault_reader_agent &
+python -m agents.pricing_decision_agent &
+python -m agents.price_execution_agent &
 ```
-This command executes `scripts/deploy.js`, which will:
-*   Compile the `AINFTVault.sol` contract.
-*   Deploy it to the Sepolia network using the `METAMASK_PRIVATE_KEY` and `SEPOLIA_URL` from your `.env.development`.
-*   Set the deployer's address as the `revenueWallet` in the contract.
-*   Automatically update or add the `CONTRACT_ADDRESS` in your `.env.development` file with the new contract address.
 
-Make sure your deployer account (specified by `METAMASK_PRIVATE_KEY`) has enough Sepolia ETH to cover gas fees.
+### Monitor System
 
-*(Alternative: You can also deploy manually using Remix IDE, but ensure you configure the `revenueWallet` correctly during deployment and update `.env.development` manually.)*
+```bash
+# View Redis keys
+redis-cli keys "*"
 
-### 5. **Run the AI NFT Engine (Backend Scripts)**
-Once the contract is deployed and `CONTRACT_ADDRESS` is set in `.env.development`:
+# Monitor logs
+tail -f logs/agent_*.log
+## 📚 Documentation
 
-*   **Main AI Agent (Server for P2P, Qwen interaction, minting):**
-    ```bash
-    node backend/pear-nft-swarm.js
-    ```
+### Agent Lifecycle
+
+Each agent follows this lifecycle:
+
+1. **Initialization**: Set up resources and connections
+2. **Execution**: Process tasks from the queue
+3. **Feedback**: Log results and update context
+4. **Cleanup**: Release resources on shutdown
+
+### Error Handling
+
+- Agents automatically retry failed operations
+- Critical errors trigger graceful degradation
+- All errors are logged with context for debugging
+
+### Monitoring
+
+- Logs are written to `logs/agent_<id>.log`
+- Redis stores operational metrics
+- Use `redis-cli monitor` for real-time debugging
+
+## 🚀 Next Steps
+
+1. **Enhance Agents**:
+   - Add more sophisticated pricing strategies
+   - Implement gas optimization
+   - Add support for multiple blockchains
+
+2. **Improve MCP**:
+   - Add access control
+   - Implement context versioning
+   - Add support for binary data
+
+3. **Scaling**:
+   - Add load balancing
+   - Implement sharding for Redis
+   - Add support for distributed tracing
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a Pull Request
+
+## 📜 License
+
+MIT
+
+## 📞 Contact
+
+For questions or support, please open an issue on GitHub.
 *   **Dynamic Pricing Script (Manual Run for Local Testing):**
     The `dynamic_pricing.js` script is primarily designed for the GitHub Actions workflow but can be run locally for testing. It reads `lastTransactionCount.json` (created on first run if not present) and adjusts the `minimumPrice` on the contract if new transactions are detected.
     ```bash
