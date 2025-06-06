@@ -72,8 +72,9 @@ jobs:
           # Only show non-sensitive environment variables
           printenv | grep -v -i "key\|secret\|private"
           
-          echo "=== Installing Dependencies ==="
-          npm ci
+          # Dependencies are already installed in the "Install dependencies" step.
+          # echo "=== Installing Dependencies ===" # Line removed
+          # npm ci # Line removed
           
           echo "=== Running Script ==="
           NODE_OPTIONS='--experimental-vm-modules' node --experimental-modules backend/dynamic_pricing.js
